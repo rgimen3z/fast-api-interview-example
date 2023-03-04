@@ -14,10 +14,14 @@ The backfilled data will get stored in our own SQLite DB.
 ## Setup
 This already assumes you're using MacOS/Linux and have python3.9 installed.
 
-From the home directory for this project: 
-- Create venv (feel free to pick a different name): python3.9 -m venv venv
-- Activate venv: source venv/bin/activate
-- Install requirements: pip install -r requirements.txt
+From the home directory for this project:
+
+- Create venv (feel free to pick a different name):
+> python3.9 -m venv venv
+- Activate venv: 
+> source venv/bin/activate
+- Install requirements:
+>pip install -r requirements.txt
 
 
 ## Backfilling data
@@ -26,7 +30,8 @@ From the home directory for this project:
 Going forward, we don't need to backfill every single transaction and merchant, just
 the ones updated since the the last backfill (query for the last udpdated row in our DB to figure out last
 backfill date)
-- To run the initial backfill: python -m db_populator_task
+- To run the initial backfill:
+> python -m db_populator_task
 
 
 ## Running our server
@@ -38,35 +43,44 @@ backfilled before returning to the user.
 Solution: need to better understand the use case. If we need to support the latest transactions coming
 from the old Acme API, we may need to query from both our DB and the Acme API and combine the data
 
-- To run our server in "dev" mode: uvicorn main:app --reload
+- To run our server in "dev" mode:
+> uvicorn main:app --reload
 
 
 ## Getting a settlement amount for a merchant and a date
 With the server running, go to http://127.0.0.1:8000/settlement and pass in a merchant_id
 
-Date defaults to current day:
-Example: http://127.0.0.1:8000/settlement/03338d50-87d3-476c-a3a2-60c5edb1f96e
-Response: {"settlement":{"merchant_id":"03338d50-87d3-476c-a3a2-60c5edb1f96e","date":"2023-03-03","amount":186540.16999999998}}
+Date defaults to current day. Example:
 
-If date_str is passed as a query param, transactions are filtered:
-Example: http://127.0.0.1:8000/settlement/03338d50-87d3-476c-a3a2-60c5edb1f96e?date_str=2022-12-25
-{"settlement":{"merchant_id":"03338d50-87d3-476c-a3a2-60c5edb1f96e","date":"2022-12-25","amount":18034.559999999998}}
+http://127.0.0.1:8000/settlement/03338d50-87d3-476c-a3a2-60c5edb1f96e
+
+Response:
+> {"settlement":{"merchant_id":"03338d50-87d3-476c-a3a2-60c5edb1f96e","date":"2023-03-03","amount":186540.16999999998}}
+
+If date_str is passed as a query param, transactions are filtered. Example:
+
+http://127.0.0.1:8000/settlement/03338d50-87d3-476c-a3a2-60c5edb1f96e?date_str=2022-12-25
+
+> {"settlement":{"merchant_id":"03338d50-87d3-476c-a3a2-60c5edb1f96e","date":"2022-12-25","amount":18034.559999999998}}
 
 
 ## Using the cli
-Learn about available commands: python -m acmecli
+Learn about available commands: 
+> python -m acmecli
+
 > Usage: python -m acmecli [OPTIONS] COMMAND [ARGS]...
 >
 > Options:
   --help  Show this message and exit.
 >
->Commands:
+> Commands:
 >  get-all-merchants
 >  get-settlement-for-merchant
 
 
 Calculate settlement amount for merchant by id and date:
-python -m acmecli get-settlement-for-merchant 03338d50-87d3-476c-a3a2-60c5edb1f96e
+> python -m acmecli get-settlement-for-merchant 03338d50-87d3-476c-a3a2-60c5edb1f96e
+
 > 186540.16999999998
 
 
