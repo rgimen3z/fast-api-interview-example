@@ -1,0 +1,4 @@
+backoff
+fastapi[all]
+requests
+sqlalchemy
